@@ -2,17 +2,17 @@ import { api } from '@/src/lib/axios';
 
 class AuthService {
   async loginWithGoogle(): Promise<void> {
-    const { data } = await api.get<void>('/auth/google');
+    const { data } = await api.post<void>('/auth/google');
     return data;
   }
 
   async loginWithGitHub(): Promise<void> {
-    const { data } = await api.get<void>('/auth/github');
+    const { data } = await api.post<void>('/auth/github');
     return data;
   }
 
   async logout(): Promise<void> {
-    const { data } = await api.get<void>('/auth/logout');
+    const { data } = await api.post<void>('/auth/logout');
     return data;
   }
 }
