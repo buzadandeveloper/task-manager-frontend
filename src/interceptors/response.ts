@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { showToast } from '@/src/lib/showToast';
+import { showToast } from '@/lib/showToast';
 
 const responseInterceptor = (response: AxiosResponse): AxiosResponse => {
   return response;

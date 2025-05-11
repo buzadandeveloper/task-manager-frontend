@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authService } from '@/src/services/auth.service';
+import { authService } from '@/services/auth.service';
 
 export const useLoginWithGoogle = () => {
   const queryClient = useQueryClient();
