@@ -1,7 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { Toast } from '@/src/components/toast';
+import { Toast } from '@/components/toast';
 
 type showToastProps = {
   title: string;

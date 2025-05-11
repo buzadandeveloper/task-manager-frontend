@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { requestInterceptor, requestErrorInterceptor } from '@/src/interceptors/request';
-import { responseInterceptor, responseErrorInterceptor } from '@/src/interceptors/response';
+import { requestInterceptor, requestErrorInterceptor } from '@/interceptors/request';
+import { responseInterceptor, responseErrorInterceptor } from '@/interceptors/response';
 
 const options = {
   baseURL: process.env.APP_API_URL,

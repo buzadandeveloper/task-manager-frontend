@@ -1,5 +1,5 @@
-import { api } from '@/src/lib/axios';
-import { Task, TaskBody } from '@/src/types/task.types';
+import { api } from '@/lib/axios';
+import { Task, TaskBody } from '@/types/task.types';
 
 class TaskService {
   async getTasks(): Promise<Task[]> {

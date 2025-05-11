@@ -1,5 +1,5 @@
-import { api } from '@/src/lib/axios';
-import { User } from '@/src/types/user.types';
+import { api } from '@/lib/axios';
+import { User } from '@/types/user.types';
 
 class UserService {
   async getCurrentUser(): Promise<User> {
