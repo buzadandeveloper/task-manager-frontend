@@ -1,19 +1,16 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import { QueryProvider } from '@/src/providers/QueryProvider';
-import { Toaster } from '@/src/components/ui/sonner';
+import { Open_Sans } from 'next/font/google';
+import { QueryProvider } from '@/providers/QueryProvider';
+import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const openSans = Open_Sans({
+  variable: '--font-open-sans',
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -26,11 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang='en'
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-    >
+    <html lang='en' suppressHydrationWarning className={`${openSans.variable} antialiased`}>
       <body>
         <ThemeProvider attribute='class' defaultTheme='light' enableSystem>
           <QueryProvider>
