@@ -1,9 +1,12 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
-import { QueryProvider } from '@/providers/QueryProvider';
+import { QueryProvider } from '@/providers/query-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from 'next-themes';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/app-sidebar';
+import { AppNavbar } from '@/components/app-navbar';
 import './globals.css';
 
 const openSans = Open_Sans({
@@ -27,8 +30,12 @@ export default function RootLayout({
       <body>
         <ThemeProvider attribute='class' defaultTheme='light' enableSystem>
           <QueryProvider>
-            {children}
-            <Toaster position={'top-right'} expand visibleToasts={1} />
+            <AppNavbar />
+            <SidebarProvider>
+              <AppSidebar />
+              {children}
+              <Toaster position={'top-right'} expand visibleToasts={1} />
+            </SidebarProvider>
           </QueryProvider>
         </ThemeProvider>
       </body>

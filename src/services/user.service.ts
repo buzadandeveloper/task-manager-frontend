@@ -3,7 +3,7 @@ import { User } from '@/types/user.types';
 
 class UserService {
   async getCurrentUser(): Promise<User> {
-    const { data } = await api.get<User>('/api/users/me');
+    const { data } = await api.get<User>('api/users/me');
     return data;
   }
 }

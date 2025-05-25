@@ -12,7 +12,7 @@ import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/comp
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-type PreviewTaskCardProps = {
+type TaskCardProps = {
   id: number;
   status: string;
   description: string;
@@ -20,13 +20,7 @@ type PreviewTaskCardProps = {
   action: () => void;
 };
 
-export const PreviewTaskCard = ({
-  id,
-  status,
-  description,
-  date,
-  action,
-}: PreviewTaskCardProps) => {
+export const TaskCard = ({ id, status, description, date, action }: TaskCardProps) => {
   return (
     <Card className='w-[250px] h-[180px] flex justify-between'>
       <CardHeader className='flex justify-between'>
@@ -37,11 +31,11 @@ export const PreviewTaskCard = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger className='w-full'>
-              <CardDescription className='text-base font-medium leading-none truncate'>
+              <CardDescription className='text-base font-medium leading-none truncate text-start'>
                 {description}
               </CardDescription>
             </TooltipTrigger>
-            <TooltipContent className='w-[190px]'>{description}</TooltipContent>
+            <TooltipContent className='max-w-[190px]'>{description}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </CardContent>

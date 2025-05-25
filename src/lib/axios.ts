@@ -3,8 +3,8 @@ import { requestInterceptor, requestErrorInterceptor } from '@/interceptors/requ
 import { responseInterceptor, responseErrorInterceptor } from '@/interceptors/response';
 
 const options = {
-  baseURL: process.env.APP_API_URL,
-  withCredentials: true,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: false,
   headers: {
     'Content-Type': 'application/json',
   },
