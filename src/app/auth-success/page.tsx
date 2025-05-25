@@ -1,23 +1,10 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+import { AuthSuccessClient } from '@/app/auth-success/auth-success-client';
 
 export default function AuthSuccess() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const token = searchParams.get('token');
-
-    if (token) {
-      document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24};`;
-
-      router.replace('/dashboard');
-    } else {
-      router.replace('/login');
-    }
-  }, [router, searchParams]);
-
-  return null;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthSuccessClient />
+    </Suspense>
+  );
 }
