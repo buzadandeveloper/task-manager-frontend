@@ -1,6 +1,6 @@
 import { InternalAxiosRequestConfig, AxiosError } from 'axios';
 import { getCookie } from 'cookies-next';
-import { showToast } from '@/lib/showToast';
+import { showToast } from '@/lib/show-toast';
 
 const requestInterceptor = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   const token = getCookie('token');
