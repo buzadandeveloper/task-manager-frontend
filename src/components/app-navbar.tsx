@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useOAuthLogin } from '@/hooks/use-auth';
+import { useOAuthLogin } from '@/features/login/hooks/use-auth';
 
 export const AppNavbar = () => {
   const { loginWithGoogle } = useOAuthLogin();
