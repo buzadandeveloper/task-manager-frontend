@@ -1,5 +1,3 @@
-'use client';
-
 import { Suspense } from 'react';
 import { AuthSuccessClient } from '@/app/auth-success/auth-success-client';
 
