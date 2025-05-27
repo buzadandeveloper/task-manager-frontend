@@ -4,10 +4,7 @@ import { responseInterceptor, responseErrorInterceptor } from '@/interceptors/re
 
 const options = {
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: false,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  withCredentials: true,
 };
 
 export const api = axios.create(options);

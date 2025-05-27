@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { getCookie } from 'cookies-next';
+'use client';
 
 export const useOAuthLogin = () => {
   const loginWithGoogle = () => {
@@ -11,16 +10,11 @@ export const useOAuthLogin = () => {
     const redirectBase = window.location.origin;
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}auth/github?redirect_uri=${redirectBase}`;
   };
-  return { loginWithGoogle, loginWithGitHub };
-};
 
-export const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
+  const logout = () => {
+    const redirectBase = window.location.origin;
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}auth/logout?redirect_uri=${redirectBase}`;
+  };
 
-  useEffect(() => {
-    const token = getCookie('token');
-    setIsAuthenticated(!!token);
-  }, [isAuthenticated]);
-
-  return { isAuthenticated };
+  return { loginWithGoogle, loginWithGitHub, logout };
 };
