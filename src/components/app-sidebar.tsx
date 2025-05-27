@@ -11,6 +11,8 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Home, Settings, SquareUserRound } from 'lucide-react';
+import { useQueryData } from '@/hooks/use-query-data';
+import { User } from '@/features/profile/types/user.types';
 
 const items = [
   {
@@ -31,6 +33,10 @@ const items = [
 ];
 
 export const AppSidebar = () => {
+  const user = useQueryData<User>('current-user');
+
+  if (!user) return null;
+
   return (
     <>
       <Sidebar>
