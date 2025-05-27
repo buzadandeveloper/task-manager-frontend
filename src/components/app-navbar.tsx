@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { useOAuthLogin } from '@/features/login/hooks/use-auth';
 
 export const AppNavbar = () => {
-  const { loginWithGoogle } = useOAuthLogin();
+  const { loginWithGoogle, logout } = useOAuthLogin();
 
   return (
     <Card className='w-full h-[50px] bg-sidebar fixed top-0 left-0 z-50 rounded-none shadow-none'>
-      <CardContent className='flex justify-end items-center h-full ml-[10em] mr-[10em]'>
+      <CardContent className='flex justify-end items-center h-full ml-[10em] mr-[10em] gap-5'>
         <Button
           size='sm'
           variant='secondary'
@@ -16,6 +16,14 @@ export const AppNavbar = () => {
           onClick={loginWithGoogle}
         >
           Google
+        </Button>
+        <Button
+          size='sm'
+          variant='secondary'
+          className='text-xs h-[25px] p-[0.6em] font-medium'
+          onClick={logout}
+        >
+          log out
         </Button>
       </CardContent>
     </Card>

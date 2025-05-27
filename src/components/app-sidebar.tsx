@@ -11,7 +11,6 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Home, Settings, SquareUserRound } from 'lucide-react';
-import { useAuth } from '@/features/login/hooks/use-auth';
 
 const items = [
   {
@@ -32,10 +31,6 @@ const items = [
 ];
 
 export const AppSidebar = () => {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) return null;
-
   return (
     <>
       <Sidebar>
