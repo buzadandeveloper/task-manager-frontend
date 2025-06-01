@@ -5,5 +5,6 @@ export const useUser = () => {
   return useQuery({
     queryKey: ['current-user'],
     queryFn: () => userService.getCurrentUser(),
+    // enabled: !!id,
   });
 };
