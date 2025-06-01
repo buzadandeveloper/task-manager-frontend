@@ -1,0 +1,30 @@
+'use client';
+import { useOAuthLogin } from '@/features/login/hooks/use-auth';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Github } from 'lucide-react';
+import { GoogleIcon } from '@/features/icons/google-icon';
+
+export const LoginCard = () => {
+  const { loginWithGoogle, loginWithGitHub } = useOAuthLogin();
+
+  return (
+    <main className='w-[65%] h-screen'>
+      <Card className='flex justify-center align-center w-full h-screen rounded-none bg-white/10 backdrop-blur-none dark:bg-zinc-800'>
+        <CardHeader className='text-center'>
+          <CardTitle className='text-4xl'>Welcome</CardTitle>
+          <CardDescription className='text-xl'>Sign in to your account</CardDescription>
+        </CardHeader>
+        <CardContent className='flex flex-col items-center justify-center gap-2'>
+          <Button variant='secondary' className='w-xs' onClick={loginWithGoogle}>
+            <GoogleIcon /> Continue with Google
+          </Button>
+          <span>or</span>
+          <Button variant='secondary' className='w-xs' onClick={loginWithGitHub}>
+            <Github /> Continue with GitHub
+          </Button>
+        </CardContent>
+      </Card>
+    </main>
+  );
+};
