@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning className={`${openSans.variable} antialiased`}>
       <body>
-        <ThemeProvider attribute='class' defaultTheme='light' enableSystem>
+        <ThemeProvider attribute='class' defaultTheme='light' storageKey='theme'>
           <QueryProvider>
             <AppNavbar />
             <SidebarProvider>

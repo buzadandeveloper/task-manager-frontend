@@ -2,29 +2,46 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useOAuthLogin } from '@/features/login/hooks/use-auth';
+import { ThemeButton } from '@/components/theme-button';
+import { LayoutDashboard, LogOut } from 'lucide-react';
+import { TaskManagerIcon } from '@/icons/task-manager-icon';
+import { useQueryData } from '@/hooks/use-query-data';
+import { useRouter, usePathname } from 'next/navigation';
+import { User } from '@/features/profile/types/user.types';
 
 export const AppNavbar = () => {
-  const { loginWithGoogle, logout } = useOAuthLogin();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { logout } = useOAuthLogin();
+  const user = useQueryData<User>('current-user');
+
+  const hiddenRoutes = ['/login'];
+  if (hiddenRoutes.includes(pathname)) {
+    return null;
+  }
 
   return (
-    <Card className='w-full h-[50px] bg-sidebar fixed top-0 left-0 z-50 rounded-none shadow-none'>
-      <CardContent className='flex justify-end items-center h-full ml-[10em] mr-[10em] gap-5'>
-        <Button
-          size='sm'
-          variant='secondary'
-          className='text-xs h-[25px] p-[0.6em] font-medium'
-          onClick={loginWithGoogle}
-        >
-          Google
-        </Button>
-        <Button
-          size='sm'
-          variant='secondary'
-          className='text-xs h-[25px] p-[0.6em] font-medium'
-          onClick={logout}
-        >
-          log out
-        </Button>
+    <Card className='w-full h-[50px] bg-white/10 backdrop-blur-none fixed rounded-none shadow-none dark:bg-zinc-800'>
+      <CardContent className='flex justify-between items-center h-full ml-[10em] mr-[10em] gap-5'>
+        <div className='flex gap-1 text-l hover:bg-transparent'>
+          <TaskManagerIcon />
+          Task Manager
+        </div>
+        <div>
+          {!user && (
+            <Button size='sm' variant='nav' onClick={() => router.push('/login')}>
+              <LayoutDashboard />
+              Dashboard
+            </Button>
+          )}
+          {user && (
+            <Button size='sm' variant='nav' onClick={logout}>
+              <LogOut />
+              Log Out
+            </Button>
+          )}
+          <ThemeButton />
+        </div>
       </CardContent>
     </Card>
   );

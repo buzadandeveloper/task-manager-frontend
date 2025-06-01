@@ -10,27 +10,35 @@ import {
   SidebarMenuButton,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { Home, Settings, SquareUserRound } from 'lucide-react';
+import { Settings, SquareUserRound, LayoutDashboard } from 'lucide-react';
+import { useQueryData } from '@/hooks/use-query-data';
+import { useRouter } from 'next/navigation';
+import { User } from '@/features/profile/types/user.types';
 
 const items = [
   {
-    title: 'Home',
-    url: '#',
-    icon: Home,
+    title: 'Dashboard',
+    url: '/dashboard',
+    icon: LayoutDashboard,
   },
   {
     title: 'Profile',
-    url: '#',
+    url: '/',
     icon: SquareUserRound,
   },
   {
     title: 'Settings',
-    url: '#',
+    url: '/settings',
     icon: Settings,
   },
 ];
 
 export const AppSidebar = () => {
+  const user = useQueryData<User>('current-user');
+  const router = useRouter();
+
+  if (!user) return null;
+
   return (
     <>
       <Sidebar>
@@ -41,11 +49,9 @@ export const AppSidebar = () => {
               <SidebarMenu>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
+                    <SidebarMenuButton onClick={() => router.push(item.url)}>
+                      <item.icon />
+                      <span>{item.title}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
