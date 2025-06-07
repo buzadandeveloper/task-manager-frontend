@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 import { AuthSuccessClient } from '@/app/auth-success/auth-success-client';
 
-export default function AuthSuccess() {
+export default function AuthSuccessPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <AuthSuccessClient />
     </Suspense>
   );

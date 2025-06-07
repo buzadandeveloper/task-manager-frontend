@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { LoadingSpinner } from '@/components/loading-spinner';
 
 export const AuthSuccessClient = () => {
   const router = useRouter();
@@ -18,5 +19,5 @@ export const AuthSuccessClient = () => {
     }
   }, [router, searchParams]);
 
-  return null;
+  return <LoadingSpinner />;
 };
