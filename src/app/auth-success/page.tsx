@@ -1,5 +1,10 @@
+import { Suspense } from 'react';
 import { AuthSuccessClient } from '@/app/auth-success/auth-success-client';
 
 export default function AuthSuccessPage() {
-  return <AuthSuccessClient />;
+  return (
+    <Suspense>
+      <AuthSuccessClient />
+    </Suspense>
+  );
 }
