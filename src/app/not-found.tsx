@@ -8,7 +8,7 @@ export default function NotFound() {
         Task Manager
       </div>
       <div className='relative flex flex-col gap-2 ml-12 mr-12'>
-        <h1 className='text-4xl text-center font-bold'>404 - Page Not Found</h1>
+        <h1 className='text-4xl text-center font-bold'>404 - Not Found</h1>
         <p className='text-xl'>The page you are looking for does not exist.</p>
       </div>
     </main>

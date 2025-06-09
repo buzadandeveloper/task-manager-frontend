@@ -22,7 +22,7 @@ type TaskCardProps = {
 
 export const TaskCard = ({ id, status, description, date, action }: TaskCardProps) => {
   return (
-    <Card className='w-[250px] h-[180px] flex justify-between'>
+    <Card className='w-[250px] h-[180px] flex justify-between dark:bg-zinc-800'>
       <CardHeader className='flex justify-between'>
         <CardTitle>{`T-${id}`}</CardTitle>
         <Badge>{status}</Badge>
@@ -31,7 +31,7 @@ export const TaskCard = ({ id, status, description, date, action }: TaskCardProp
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger className='w-full'>
-              <CardDescription className='text-base font-medium leading-none truncate text-start'>
+              <CardDescription className='text-base font-medium leading-none truncate text-start h-[20px]'>
                 {description}
               </CardDescription>
             </TooltipTrigger>
