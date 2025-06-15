@@ -1,11 +1,11 @@
 'use client';
 import { withAuth } from '@/lib/with-auth';
-import { CreateTaskDialog } from '@/features/tasks';
+import { TaskCard } from '@/features/tasks';
 
 function Dashboard() {
   return (
     <div className='flex items-center justify-center h-screen w-full'>
-      <CreateTaskDialog />
+      <TaskCard id={1} status={'To do'} description={'To do something'} date={'14-06-25'} />
     </div>
   );
 }

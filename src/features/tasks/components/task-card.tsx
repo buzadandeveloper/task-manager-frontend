@@ -10,17 +10,16 @@ import {
 } from '@/components/ui/card';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { ViewTaskInformation } from '@/features/tasks';
 
 type TaskCardProps = {
   id: number;
   status: string;
   description: string;
   date: string;
-  action: () => void;
 };
 
-export const TaskCard = ({ id, status, description, date, action }: TaskCardProps) => {
+export const TaskCard = ({ id, status, description, date }: TaskCardProps) => {
   return (
     <Card className='w-[250px] h-[180px] flex justify-between dark:bg-zinc-800'>
       <CardHeader className='flex justify-between'>
@@ -40,14 +39,7 @@ export const TaskCard = ({ id, status, description, date, action }: TaskCardProp
         </TooltipProvider>
       </CardContent>
       <CardFooter className='flex justify-between'>
-        <Button
-          size='sm'
-          variant='secondary'
-          className='text-xs h-[25px] p-[0.6em] font-medium'
-          onClick={action}
-        >
-          Open Task
-        </Button>
+        <ViewTaskInformation />
         <CardDescription>{date}</CardDescription>
       </CardFooter>
     </Card>
