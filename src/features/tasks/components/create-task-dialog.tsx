@@ -24,6 +24,7 @@ export const CreateTaskDialog = () => {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<TaskFormData>({
     resolver: zodResolver(taskSchema),
@@ -38,6 +39,14 @@ export const CreateTaskDialog = () => {
     setValue('date', date, { shouldValidate: true });
   };
 
+  const onHandleCancel = () => {
+    reset({
+      name: '',
+      date: new Date(),
+      details: '',
+    });
+  };
+
   const onSubmit = (data: TaskFormData) => {
     console.log('Task Created:', data);
   };
@@ -47,20 +56,28 @@ export const CreateTaskDialog = () => {
       <DialogTrigger asChild>
         <Button variant='outline'>Create Task</Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent
+        className='sm:max-w-[425px] dark:bg-zinc-800'
+        onCloseAutoFocus={onHandleCancel}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='grid gap-4'>
             <DialogHeader>
               <DialogTitle>Create Task</DialogTitle>
             </DialogHeader>
-            <div className='grid gap-3'>
-              <Label htmlFor='task-name'>Task Name</Label>
-              <Input id='task-name' {...register('name')} />
+            <div className='grid gap-1'>
+              <div className='grid gap-3'>
+                <Label htmlFor='task-name'>Task Name</Label>
+                <Input id='task-name' {...register('name')} maxLength={100} />
+              </div>
               {errors.name && <p className='text-red-500 text-sm'>{errors.name.message}</p>}
             </div>
-            <div className='grid gap-3'>
-              <Label htmlFor='task-date'>Task Date</Label>
-              <DatePicker selected={watch('date')} onSelect={(date) => setDate(date as Date)} />
+            <div className='grid gap-1'>
+              <div className='grid gap-3'>
+                <Label htmlFor='task-date'>Task Date</Label>
+                <DatePicker selected={watch('date')} onSelect={(date) => setDate(date as Date)} />
+              </div>
               {errors.date && <p className='text-red-500 text-sm'>{errors.date.message}</p>}
             </div>
             <div className='grid gap-3'>
@@ -72,7 +89,9 @@ export const CreateTaskDialog = () => {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant='outline'>Cancel</Button>
+                <Button variant='outline' onClick={() => onHandleCancel()}>
+                  Cancel
+                </Button>
               </DialogClose>
               <Button type='submit'>Create</Button>
             </DialogFooter>
