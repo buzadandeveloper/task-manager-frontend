@@ -40,8 +40,8 @@ export const AppSidebar = () => {
   if (!user) return null;
 
   return (
-    <>
-      <Sidebar>
+    <div className='fixed'>
+      <Sidebar className='relative'>
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -58,9 +58,9 @@ export const AppSidebar = () => {
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
+          <SidebarTrigger className='absolute top-0 ml-[260px]' />
         </SidebarContent>
       </Sidebar>
-      <SidebarTrigger />
-    </>
+    </div>
   );
 };

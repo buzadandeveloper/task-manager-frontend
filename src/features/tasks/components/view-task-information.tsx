@@ -47,7 +47,7 @@ export const ViewTaskInformation = () => {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className='sm:max-w-[425px] dark:bg-zinc-800'
+        className='sm:max-w-[425px] bg-card'
         onCloseAutoFocus={handleCancel}
         onInteractOutside={(e) => e.preventDefault()}
       >
@@ -63,7 +63,7 @@ export const ViewTaskInformation = () => {
               <DropdownMenuTrigger asChild>
                 <Badge className='cursor-pointer'>To do</Badge>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className='dark:bg-zinc-800'>
+              <DropdownMenuContent className='bg-card'>
                 <DropdownMenuLabel>Status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuRadioGroup value='todo'>
