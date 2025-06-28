@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Dialog,
@@ -17,8 +18,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/date-picker';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { taskSchema, TaskFormData } from '@/features/tasks/schemas/task.schema';
+import { useCreateTask } from '@/features/tasks/hooks/use-task';
 
 export const CreateTaskDialog = () => {
+  const [open, setOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -29,11 +32,12 @@ export const CreateTaskDialog = () => {
   } = useForm<TaskFormData>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      name: '',
+      title: '',
       date: new Date(),
-      details: '',
+      description: '',
     },
   });
+  const { mutate: createTask } = useCreateTask();
 
   const setDate = (date: Date) => {
     setValue('date', date, { shouldValidate: true });
@@ -41,23 +45,30 @@ export const CreateTaskDialog = () => {
 
   const onHandleCancel = () => {
     reset({
-      name: '',
+      title: '',
       date: new Date(),
-      details: '',
+      description: '',
     });
   };
 
   const onSubmit = (data: TaskFormData) => {
-    console.log('Task Created:', data);
+    const payload = {
+      ...data,
+      date: data.date.toISOString(),
+      status: 0,
+    };
+
+    createTask(payload, { onSuccess: () => onHandleCancel() });
+    setOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>Create Task</Button>
       </DialogTrigger>
       <DialogContent
-        className='sm:max-w-[425px] dark:bg-zinc-800'
+        className='sm:max-w-[425px] bg-card'
         onCloseAutoFocus={onHandleCancel}
         onInteractOutside={(e) => e.preventDefault()}
       >
@@ -69,9 +80,9 @@ export const CreateTaskDialog = () => {
             <div className='grid gap-1'>
               <div className='grid gap-3'>
                 <Label htmlFor='task-name'>Task Name</Label>
-                <Input id='task-name' {...register('name')} maxLength={100} />
+                <Input id='task-name' {...register('title')} maxLength={100} />
               </div>
-              {errors.name && <p className='text-red-500 text-sm'>{errors.name.message}</p>}
+              {errors.title && <p className='text-red-500 text-sm'>{errors.title.message}</p>}
             </div>
             <div className='grid gap-1'>
               <div className='grid gap-3'>
@@ -84,7 +95,7 @@ export const CreateTaskDialog = () => {
               <Label htmlFor='task-details'>Task Details</Label>
               <Textarea
                 className='custom-scrollbar resize-none h-[150px]'
-                {...register('details')}
+                {...register('description')}
               />
             </div>
             <DialogFooter>

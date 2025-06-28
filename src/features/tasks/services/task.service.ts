@@ -17,8 +17,8 @@ class TaskService {
     return data;
   }
 
-  async createTask(task: TaskBody): Promise<Task> {
-    const { data } = await api.post<Task>('/api/tasks', task);
+  async createTask(task: TaskBody): Promise<TaskBody> {
+    const { data } = await api.post<TaskBody>('/api/tasks/newTask', task);
     return data;
   }
 

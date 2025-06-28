@@ -26,8 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning className={`${openSans.variable} antialiased`}>
-      <body>
+    <html
+      lang='en'
+      suppressHydrationWarning
+      className={`${openSans.variable} antialiased overflow-hidden`}
+    >
+      <body className='overflow-none'>
         <ThemeProvider attribute='class' defaultTheme='light' storageKey='theme'>
           <QueryProvider>
             <AppNavbar />

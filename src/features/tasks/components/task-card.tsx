@@ -21,7 +21,7 @@ type TaskCardProps = {
 
 export const TaskCard = ({ id, status, description, date }: TaskCardProps) => {
   return (
-    <Card className='w-[250px] h-[180px] flex justify-between dark:bg-zinc-800'>
+    <Card className='w-full h-[180px] flex justify-between'>
       <CardHeader className='flex justify-between'>
         <CardTitle>{`T-${id}`}</CardTitle>
         <Badge>{status}</Badge>

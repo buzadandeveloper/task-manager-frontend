@@ -1,12 +1,9 @@
 export type Task = {
-  id: number;
+  id?: number;
   title: string;
-  description: string;
-  status: number;
-  startTime: string;
-  endTime: string;
-  createdAt: string;
-  updatedAt: string;
+  description?: string;
+  status?: number;
+  date: string;
 };
 
 export type TaskBody = Omit<Task, 'id' | 'createdAt' | 'updatedAt'>;
