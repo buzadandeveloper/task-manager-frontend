@@ -1,8 +1,9 @@
+import { TaskStatus } from '@/features/tasks/constants/statuses';
 export type Task = {
   id?: number;
   title: string;
   description?: string;
-  status?: number;
+  status?: TaskStatus;
   date: string;
 };
 

@@ -23,9 +23,20 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
+import { useDeleteTask } from '@/features/tasks/hooks/use-task';
+import { Task } from '@/features/tasks/types/task.types';
+import { STATUSES } from '@/features/tasks/constants/statuses';
+import { format } from 'date-fns';
 
-export const ViewTaskInformation = () => {
+type ViewTaskInformationProps = {
+  task: Task;
+};
+
+export const ViewTaskInformation = ({ task }: ViewTaskInformationProps) => {
+  const { id, status, title, description, date } = task;
+  const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const { mutate: deleteTask } = useDeleteTask();
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
@@ -39,8 +50,13 @@ export const ViewTaskInformation = () => {
     setIsEditing(false);
   };
 
+  const handleDelete = (id: number) => {
+    deleteTask(id);
+    setOpen(false);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size='sm' variant='secondary' className='text-xs h-[25px] p-[0.6em] font-medium'>
           Open Task
@@ -58,10 +74,10 @@ export const ViewTaskInformation = () => {
         </div>
         <div>
           <div className='flex justify-between'>
-            <DialogTitle className='text-md'>T-1</DialogTitle>
+            <DialogTitle className='text-md'>T-{id}</DialogTitle>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Badge className='cursor-pointer'>To do</Badge>
+                <Badge className='cursor-pointer'>{STATUSES[status!]}</Badge>
               </DropdownMenuTrigger>
               <DropdownMenuContent className='bg-card'>
                 <DropdownMenuLabel>Status</DropdownMenuLabel>
@@ -77,11 +93,15 @@ export const ViewTaskInformation = () => {
           <div className='flex flex-col gap-2'>
             <div>
               <DialogTitle className='text-md font-normal'>Task name:</DialogTitle>
-              <Input disabled={!isEditing} />
+              <Input disabled={!isEditing} defaultValue={title} />
             </div>
             <div>
               <DialogTitle className='text-md font-normal'>Task details:</DialogTitle>
-              <Textarea className='custom-scrollbar resize-none h-[150px]' disabled={!isEditing} />
+              <Textarea
+                className='custom-scrollbar resize-none h-[150px]'
+                disabled={!isEditing}
+                defaultValue={description}
+              />
             </div>
           </div>
         </div>
@@ -120,7 +140,7 @@ export const ViewTaskInformation = () => {
                     </Tooltip>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Button variant='secondary'>
+                        <Button variant='secondary' onClick={() => handleDelete(id!)}>
                           <Trash2 />
                         </Button>
                       </TooltipTrigger>
@@ -130,7 +150,7 @@ export const ViewTaskInformation = () => {
                 )}
               </TooltipProvider>
             </div>
-            <div className='flex items-center'>12/12/2023</div>
+            <div className='flex items-center'>{format(date, 'yyyy/MM/dd')}</div>
           </div>
         </DialogFooter>
       </DialogContent>
