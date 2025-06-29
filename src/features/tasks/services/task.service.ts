@@ -28,7 +28,7 @@ class TaskService {
   }
 
   async deleteTask(id: number): Promise<void> {
-    await api.delete(`/api/tasks/${id}`);
+    await api.delete(`/api/tasks/removeTask/${id}`);
   }
 }
 

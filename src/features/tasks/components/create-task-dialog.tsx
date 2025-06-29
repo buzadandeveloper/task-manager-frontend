@@ -55,7 +55,6 @@ export const CreateTaskDialog = () => {
     const payload = {
       ...data,
       date: data.date.toISOString(),
-      status: 0,
     };
 
     createTask(payload, { onSuccess: () => onHandleCancel() });

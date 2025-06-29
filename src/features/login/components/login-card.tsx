@@ -11,7 +11,7 @@ export const LoginCard = () => {
 
   return (
     <main className='w-[65%] h-screen max-md:w-full'>
-      <Card className='flex justify-center align-center w-full h-screen rounded-none bg-white/10 backdrop-blur-none dark:bg-zinc-800'>
+      <Card className='flex justify-center align-center w-full h-screen rounded-none bg-white/10 backdrop-blur-none bg-card'>
         <CardTitle className='flex items-center gap-1 text-l hover:bg-transparent top-5 left-5 absolute p-5'>
           <TaskManagerIcon />
           Task Manager
