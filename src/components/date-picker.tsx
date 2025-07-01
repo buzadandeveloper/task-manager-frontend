@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -13,8 +14,10 @@ type DatePickerProps = {
 };
 
 export function DatePicker({ selected, onSelect }: DatePickerProps) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={'outline'}
@@ -32,7 +35,10 @@ export function DatePicker({ selected, onSelect }: DatePickerProps) {
           className='pointer-events-auto'
           mode='single'
           selected={selected}
-          onSelect={(date) => onSelect?.(date)}
+          onSelect={(date) => {
+            onSelect?.(date);
+            setOpen(false);
+          }}
         />
       </PopoverContent>
     </Popover>
