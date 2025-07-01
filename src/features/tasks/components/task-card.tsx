@@ -22,6 +22,7 @@ type TaskCardProps = {
 
 export const TaskCard = ({ task, index }: TaskCardProps) => {
   const { title, status, date } = task;
+
   return (
     <Card className='w-full h-[180px] flex justify-between'>
       <CardHeader className='flex justify-between'>

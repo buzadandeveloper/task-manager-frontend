@@ -38,6 +38,9 @@ type ViewTaskInformationProps = {
 };
 
 export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) => {
+  const [open, setOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
   const { id, status, title, description, date } = task;
 
   const {
@@ -56,8 +59,6 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
     },
   });
 
-  const [open, setOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const { mutate: deleteTask } = useDeleteTask();
   const { mutate: editTask } = useEditTask();
 
@@ -70,7 +71,6 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
   };
 
   const handleSave = (data: TaskFormData) => {
-    console.log(data);
     const payload = {
       ...data,
       date: data.date.toISOString(),
@@ -94,8 +94,6 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
     deleteTask(id);
     setOpen(false);
   };
-
-  console.log('watch date', watch('date'));
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

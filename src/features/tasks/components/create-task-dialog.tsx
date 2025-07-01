@@ -22,6 +22,7 @@ import { DatePicker } from '@/components/date-picker';
 
 export const CreateTaskDialog = () => {
   const [open, setOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -37,6 +38,7 @@ export const CreateTaskDialog = () => {
       description: '',
     },
   });
+
   const { mutate: createTask } = useCreateTask();
 
   const setDate = (date: Date) => {
