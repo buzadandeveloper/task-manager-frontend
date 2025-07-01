@@ -21,7 +21,7 @@ function Dashboard() {
           {isLoading || isFetching ? (
             <TaskManagerIcon className='animate-spin scale-[2]' />
           ) : (
-            tasks?.map((task) => <TaskCard key={task.id} task={task} />)
+            tasks?.map((task, index) => <TaskCard key={task.id} task={task} index={index} />)
           )}
         </div>
       </div>

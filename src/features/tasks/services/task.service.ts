@@ -23,7 +23,7 @@ class TaskService {
   }
 
   async editTask(id: number, task: TaskBody): Promise<Task> {
-    const { data } = await api.put<Task>(`/api/tasks/${id}`, task);
+    const { data } = await api.put<Task>(`/api/tasks/updateTask/${id}`, task);
     return data;
   }
 

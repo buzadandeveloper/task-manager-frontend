@@ -1,5 +1,9 @@
 'use client';
 import { useState } from 'react';
+import { taskSchema, TaskFormData } from '@/features/tasks/schemas/task.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { format } from 'date-fns';
 import {
   Dialog,
   DialogContent,
@@ -22,31 +26,67 @@ import {
   DropdownMenuRadioItem,
 } from '@/components/ui/dropdown-menu';
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { DatePicker } from '@/components/date-picker';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
-import { useDeleteTask } from '@/features/tasks/hooks/use-task';
+import { useDeleteTask, useEditTask } from '@/features/tasks/hooks/use-task';
 import { Task } from '@/features/tasks/types/task.types';
 import { STATUSES } from '@/features/tasks/constants/statuses';
-import { format } from 'date-fns';
 
 type ViewTaskInformationProps = {
   task: Task;
+  index: number;
 };
 
-export const ViewTaskInformation = ({ task }: ViewTaskInformationProps) => {
+export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) => {
   const { id, status, title, description, date } = task;
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<TaskFormData>({
+    resolver: zodResolver(taskSchema),
+    defaultValues: {
+      title: title || '',
+      date: new Date(date),
+      description: description || '',
+    },
+  });
+
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { mutate: deleteTask } = useDeleteTask();
+  const { mutate: editTask } = useEditTask();
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleSave = () => {
+  const setDate = (date: Date) => {
+    setValue('date', date, { shouldValidate: true });
+  };
+
+  const handleSave = (data: TaskFormData) => {
+    console.log(data);
+    const payload = {
+      ...data,
+      date: data.date.toISOString(),
+    };
+
+    editTask({ id: id!, task: payload });
     setIsEditing(false);
+    setOpen(false);
   };
 
   const handleCancel = () => {
+    reset({
+      title: title || '',
+      date: new Date(date),
+      description: description || '',
+    });
     setIsEditing(false);
   };
 
@@ -54,6 +94,8 @@ export const ViewTaskInformation = ({ task }: ViewTaskInformationProps) => {
     deleteTask(id);
     setOpen(false);
   };
+
+  console.log('watch date', watch('date'));
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -74,7 +116,7 @@ export const ViewTaskInformation = ({ task }: ViewTaskInformationProps) => {
         </div>
         <div>
           <div className='flex justify-between'>
-            <DialogTitle className='text-md'>T-{id}</DialogTitle>
+            <DialogTitle className='text-md'>#{index + 1}</DialogTitle>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Badge className='cursor-pointer'>{STATUSES[status!]}</Badge>
@@ -91,17 +133,23 @@ export const ViewTaskInformation = ({ task }: ViewTaskInformationProps) => {
             </DropdownMenu>
           </div>
           <div className='flex flex-col gap-2'>
-            <div>
-              <DialogTitle className='text-md font-normal'>Task name:</DialogTitle>
-              <Input disabled={!isEditing} defaultValue={title} />
+            <div className='grid gap-1'>
+              <div className='grid gap-3'>
+                <DialogTitle className='text-md font-normal'>Task name:</DialogTitle>
+                <Input disabled={!isEditing} defaultValue={title} {...register('title')} />
+              </div>
+              {errors.title && <p className='text-red-500 text-sm'>{errors.title.message}</p>}
             </div>
-            <div>
-              <DialogTitle className='text-md font-normal'>Task details:</DialogTitle>
-              <Textarea
-                className='custom-scrollbar resize-none h-[150px]'
-                disabled={!isEditing}
-                defaultValue={description}
-              />
+            <div className='grid gap-1'>
+              <div className='grid gap-3'>
+                <DialogTitle className='text-md font-normal'>Task details:</DialogTitle>
+                <Textarea
+                  className='custom-scrollbar resize-none h-[150px]'
+                  disabled={!isEditing}
+                  defaultValue={description}
+                  {...register('description')}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -113,7 +161,7 @@ export const ViewTaskInformation = ({ task }: ViewTaskInformationProps) => {
                   <>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Button variant='secondary' onClick={handleSave}>
+                        <Button variant='secondary' onClick={handleSubmit(handleSave)}>
                           <Check />
                         </Button>
                       </TooltipTrigger>
@@ -150,7 +198,14 @@ export const ViewTaskInformation = ({ task }: ViewTaskInformationProps) => {
                 )}
               </TooltipProvider>
             </div>
-            <div className='flex items-center'>{format(date, 'yyyy/MM/dd')}</div>
+            {isEditing ? (
+              <div className='w-[160px]'>
+                <DatePicker selected={watch('date')} onSelect={(date) => setDate(date as Date)} />
+                {errors.date && <p className='text-red-500 text-sm'>{errors.date.message}</p>}
+              </div>
+            ) : (
+              <div className='flex items-center'>{format(date, 'yyyy/MM/dd')}</div>
+            )}
           </div>
         </DialogFooter>
       </DialogContent>

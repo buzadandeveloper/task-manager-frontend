@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { taskSchema, TaskFormData } from '@/features/tasks/schemas/task.schema';
+import { useCreateTask } from '@/features/tasks/hooks/use-task';
 import {
   Dialog,
   DialogContent,
@@ -16,9 +19,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/date-picker';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { taskSchema, TaskFormData } from '@/features/tasks/schemas/task.schema';
-import { useCreateTask } from '@/features/tasks/hooks/use-task';
 
 export const CreateTaskDialog = () => {
   const [open, setOpen] = useState(false);
