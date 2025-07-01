@@ -17,14 +17,16 @@ import { format } from 'date-fns';
 
 type TaskCardProps = {
   task: Task;
+  index: number;
 };
 
-export const TaskCard = ({ task }: TaskCardProps) => {
-  const { id, title, status, date } = task;
+export const TaskCard = ({ task, index }: TaskCardProps) => {
+  const { title, status, date } = task;
+
   return (
     <Card className='w-full h-[180px] flex justify-between'>
       <CardHeader className='flex justify-between'>
-        <CardTitle>{`T-${id}`}</CardTitle>
+        <CardTitle>{`#${index + 1}`}</CardTitle>
         <Badge>{STATUSES[status!]}</Badge>
       </CardHeader>
       <CardContent>
@@ -40,7 +42,7 @@ export const TaskCard = ({ task }: TaskCardProps) => {
         </TooltipProvider>
       </CardContent>
       <CardFooter className='flex justify-between'>
-        <ViewTaskInformation task={task} />
+        <ViewTaskInformation task={task} index={index} />
         <CardDescription>{format(date, 'yyyy/MM/dd')}</CardDescription>
       </CardFooter>
     </Card>
