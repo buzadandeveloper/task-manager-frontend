@@ -77,7 +77,7 @@
   --sidebar-ring: oklch(0.708 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
-  --hover: rgba(166, 165, 165, 0.2);
+  --hover: rgba(237, 237, 237, 0.9);
   --wrapper: var(--color-neutral-100);
 }
 
