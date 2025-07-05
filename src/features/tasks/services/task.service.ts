@@ -24,7 +24,7 @@ class TaskService {
   }
 
   async updateTaskStatus(id: number, status: TaskStatus): Promise<TaskStatus> {
-    const { data } = await api.put<TaskStatus>(`/api/tasks/updateStatus/${id}`, status);
+    const { data } = await api.put<TaskStatus>(`/api/tasks/updateStatus/${id}`, { status });
     return data;
   }
 
