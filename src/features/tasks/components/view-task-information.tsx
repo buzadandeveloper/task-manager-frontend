@@ -28,9 +28,9 @@ import {
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { DatePicker } from '@/components/date-picker';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
-import { useDeleteTask, useEditTask } from '@/features/tasks/hooks/use-task';
+import { useDeleteTask, useEditTask, useUpdateTaskStatus } from '@/features/tasks/hooks/use-task';
 import { Task } from '@/features/tasks/types/task.types';
-import { STATUSES } from '@/features/tasks/constants/statuses';
+import { STATUSES, TaskStatus } from '@/features/tasks/constants/statuses';
 
 type ViewTaskInformationProps = {
   task: Task;
@@ -61,6 +61,7 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
 
   const { mutate: deleteTask } = useDeleteTask();
   const { mutate: editTask } = useEditTask();
+  const { mutate: updateTaskStatus } = useUpdateTaskStatus();
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
@@ -76,9 +77,21 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
       date: data.date.toISOString(),
     };
 
-    editTask({ id: id!, task: payload });
-    setIsEditing(false);
-    setOpen(false);
+    editTask(
+      { id: id!, task: payload },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+          setOpen(false);
+
+          reset({ ...data });
+        },
+      },
+    );
+  };
+
+  const updateStatus = (status: string) => {
+    updateTaskStatus({ id: id!, status: Number(status) as TaskStatus });
   };
 
   const handleCancel = () => {
@@ -91,8 +104,7 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
   };
 
   const handleDelete = (id: number) => {
-    deleteTask(id);
-    setOpen(false);
+    deleteTask(id, { onSuccess: () => setOpen(false) });
   };
 
   return (
@@ -122,10 +134,13 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
               <DropdownMenuContent className='bg-card'>
                 <DropdownMenuLabel>Status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value='todo'>
-                  <DropdownMenuRadioItem value='todo'>To do</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value='in-progress'>In Progress</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value='completed'>Completed</DropdownMenuRadioItem>
+                <DropdownMenuRadioGroup
+                  value={status?.toString()}
+                  onValueChange={(newStatus) => updateStatus(newStatus)}
+                >
+                  <DropdownMenuRadioItem value='0'>To do</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value='1'>In Progress</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value='2'>Completed</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>

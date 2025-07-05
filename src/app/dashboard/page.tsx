@@ -5,7 +5,7 @@ import { useGetTasks } from '@/features/tasks/hooks/use-task';
 import { TaskManagerIcon } from '@/icons/task-manager-icon';
 
 function Dashboard() {
-  const { data: tasks, isLoading, isFetching } = useGetTasks();
+  const { data: tasks, isLoading } = useGetTasks();
 
   console.log(tasks);
 
@@ -16,9 +16,9 @@ function Dashboard() {
       </div>
       <div className='w-full h-[calc(100vh-252px)] rounded-xl p-6 overflow-auto custom-scrollbar bg-wrapper'>
         <div
-          className={`${isLoading || isFetching ? 'flex justify-center items-center h-full' : 'grid gap-4 grid-cols-[repeat(auto-fit,minmax(230px,1fr))]'}`}
+          className={`${isLoading ? 'flex justify-center items-center h-full' : 'grid gap-4 grid-cols-[repeat(auto-fit,minmax(230px,1fr))]'}`}
         >
-          {isLoading || isFetching ? (
+          {isLoading ? (
             <TaskManagerIcon className='animate-spin scale-[2]' />
           ) : (
             tasks?.map((task, index) => <TaskCard key={task.id} task={task} index={index} />)
