@@ -59,14 +59,18 @@ export const CreateTaskDialog = () => {
       date: data.date.toISOString(),
     };
 
-    createTask(payload, { onSuccess: () => onHandleCancel() });
-    setOpen(false);
+    createTask(payload, {
+      onSuccess: () => {
+        onHandleCancel();
+        setOpen(false);
+      },
+    });
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline'>Create Task</Button>
+        <Button variant='secondary'>Create Task</Button>
       </DialogTrigger>
       <DialogContent
         className='sm:max-w-[425px] bg-card'
@@ -101,7 +105,7 @@ export const CreateTaskDialog = () => {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant='outline' onClick={() => onHandleCancel()}>
+                <Button variant='secondary' onClick={() => onHandleCancel()}>
                   Cancel
                 </Button>
               </DialogClose>

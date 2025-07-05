@@ -1,14 +1,10 @@
 import { api } from '@/lib/axios';
 import { Task, TaskBody } from '@/features/tasks/types/task.types';
+import { TaskStatus } from '@/features/tasks/constants/statuses';
 
 class TaskService {
   async getTasks(): Promise<Task[]> {
     const { data } = await api.get<Task[]>('/api/tasks');
-    return data;
-  }
-
-  async getTask(id: number): Promise<Task> {
-    const { data } = await api.get<Task>(`/api/tasks/${id}`);
     return data;
   }
 
@@ -24,6 +20,11 @@ class TaskService {
 
   async editTask(id: number, task: TaskBody): Promise<Task> {
     const { data } = await api.put<Task>(`/api/tasks/updateTask/${id}`, task);
+    return data;
+  }
+
+  async updateTaskStatus(id: number, status: TaskStatus): Promise<TaskStatus> {
+    const { data } = await api.put<TaskStatus>(`/api/tasks/updateStatus/${id}`, { status });
     return data;
   }
 
