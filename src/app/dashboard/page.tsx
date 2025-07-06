@@ -1,18 +1,19 @@
 'use client';
 import { withAuth } from '@/lib/with-auth';
-import { TaskCard, CreateTaskDialog } from '@/features/tasks';
+import { TaskCard, CreateTaskDialog, FilterTask } from '@/features/tasks';
 import { useGetTasks } from '@/features/tasks/hooks/use-task';
 import { TaskManagerIcon } from '@/icons/task-manager-icon';
 
 function Dashboard() {
   const { data: tasks, isLoading } = useGetTasks();
 
-  console.log(tasks);
-
   return (
-    <div className='flex flex-col gap-[2em] h-full w-full mt-[64px] ml-8 mr-8 md:ml-[12em] md:mr-[12em]'>
+    <div className='flex flex-col gap-[1em] h-full w-full mt-[64px] ml-8 mr-8 md:ml-[12em] md:mr-[12em]'>
       <div className='w-full flex justify-end'>
         <CreateTaskDialog />
+      </div>
+      <div className='w-full rounded-xl '>
+        <FilterTask />
       </div>
       <div className='w-full h-[calc(100vh-252px)] rounded-xl p-6 overflow-auto custom-scrollbar bg-wrapper'>
         <div

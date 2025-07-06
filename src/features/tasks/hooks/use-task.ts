@@ -22,10 +22,21 @@ export const useCreateTask = () => {
 
   return useMutation({
     mutationFn: (task: Task) => taskService.createTask(task),
-    onSuccess: (newTask) => {
+    onMutate: async (task: Task) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+
       queryClient.setQueryData<Task[]>(['tasks'], (oldTasks) =>
-        oldTasks ? [...oldTasks, newTask] : [newTask],
+        oldTasks ? [...oldTasks, task] : [task],
       );
+
+      return { previousTasks };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(['tasks'], context.previousTasks);
+      }
     },
   });
 };
@@ -35,10 +46,23 @@ export const useEditTask = () => {
 
   return useMutation({
     mutationFn: ({ id, task }: { id: number; task: TaskBody }) => taskService.editTask(id, task),
-    onSuccess: (_, variables) => {
-      queryClient.setQueryData<Task[]>(['tasks'], (oldTasks) =>
-        oldTasks?.map((task) => (task.id === variables.id ? { ...task, ...variables.task } : task)),
+    onMutate: async ({ id, task }) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+
+      queryClient.setQueryData<Task[]>(
+        ['tasks'],
+        (oldTasks) =>
+          oldTasks?.map((oldTask) => (oldTask.id === id ? { ...oldTask, ...task } : oldTask)) ?? [],
       );
+
+      return { previousTasks };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(['tasks'], context.previousTasks);
+      }
     },
   });
 };
@@ -49,12 +73,22 @@ export const useUpdateTaskStatus = () => {
   return useMutation({
     mutationFn: ({ id, status }: { id: number; status: TaskStatus }) =>
       taskService.updateTaskStatus(id, status),
-    onSuccess: (_, variables) =>
+    onMutate: async ({ id, status }: { id: number; status: TaskStatus }) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+
       queryClient.setQueryData<Task[]>(['tasks'], (oldTasks) =>
-        oldTasks?.map((task) =>
-          task.id === variables.id ? { ...task, status: variables.status } : task,
-        ),
-      ),
+        oldTasks?.map((task) => (task.id === id ? { ...task, status } : task)),
+      );
+
+      return { previousTasks };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(['tasks'], context.previousTasks);
+      }
+    },
   });
 };
 
@@ -63,10 +97,21 @@ export const useDeleteTask = () => {
 
   return useMutation({
     mutationFn: (id: number) => taskService.deleteTask(id),
-    onSuccess: (_, removeId) => {
+    onMutate: async (id: number) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+
       queryClient.setQueryData<Task[]>(['tasks'], (oldTasks) =>
-        oldTasks?.filter((task) => task.id !== removeId),
+        oldTasks?.filter((task) => task.id !== id),
       );
+
+      return { previousTasks };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(['tasks'], context.previousTasks);
+      }
     },
   });
 };
