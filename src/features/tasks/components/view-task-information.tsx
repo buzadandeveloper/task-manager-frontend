@@ -73,25 +73,27 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
 
   const handleSave = (data: TaskFormData) => {
     const payload = {
-      ...data,
-      date: data.date.toISOString(),
+      id: id!,
+      task: {
+        ...data,
+        date: data.date.toISOString(),
+      },
     };
 
-    editTask(
-      { id: id!, task: payload },
-      {
-        onSuccess: () => {
-          setIsEditing(false);
-          setOpen(false);
-
-          reset({ ...data });
-        },
+    editTask(payload, {
+      onSuccess: () => {
+        reset({ ...data });
       },
-    );
+    });
+
+    setIsEditing(false);
+    setOpen(false);
   };
 
   const updateStatus = (status: string) => {
-    updateTaskStatus({ id: id!, status: Number(status) as TaskStatus });
+    const payload = { id: id!, status: Number(status) as TaskStatus };
+
+    updateTaskStatus(payload);
   };
 
   const handleCancel = () => {
@@ -104,7 +106,8 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
   };
 
   const handleDelete = (id: number) => {
-    deleteTask(id, { onSuccess: () => setOpen(false) });
+    deleteTask(id);
+    setOpen(false);
   };
 
   return (

@@ -57,14 +57,13 @@ export const CreateTaskDialog = () => {
     const payload = {
       ...data,
       date: data.date.toISOString(),
+      status: 0 as const,
     };
 
-    createTask(payload, {
-      onSuccess: () => {
-        onHandleCancel();
-        setOpen(false);
-      },
-    });
+    createTask(payload);
+
+    onHandleCancel();
+    setOpen(false);
   };
 
   return (
