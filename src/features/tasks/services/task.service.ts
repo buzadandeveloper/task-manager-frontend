@@ -3,13 +3,8 @@ import { Task, TaskBody } from '@/features/tasks/types/task.types';
 import { TaskStatus } from '@/features/tasks/constants/statuses';
 
 class TaskService {
-  async getTasks(): Promise<Task[]> {
-    const { data } = await api.get<Task[]>('/api/tasks');
-    return data;
-  }
-
-  async filterTasksByStatus(status: number): Promise<Task[]> {
-    const { data } = await api.get<Task[]>(`/api/tasks/filter/${status}`);
+  async getTasks(status: TaskStatus): Promise<Task[]> {
+    const { data } = await api.get<Task[]>(`/api/tasks?status=${status}`);
     return data;
   }
 
