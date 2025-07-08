@@ -3,31 +3,24 @@ import { taskService } from '@/features/tasks/services/task.service';
 import { Task, TaskBody } from '@/features/tasks/types/task.types';
 import { TaskStatus } from '@/features/tasks/constants/statuses';
 
-export const useGetTasks = () => {
+export const useGetTasks = (status: TaskStatus) => {
   return useQuery({
-    queryKey: ['tasks'],
-    queryFn: () => taskService.getTasks(),
+    queryKey: ['tasks', status],
+    queryFn: () => taskService.getTasks(status),
   });
 };
 
-export const useFilterTasksByStatus = (status: number) => {
-  return useQuery({
-    queryKey: ['tasks', 'filter', status],
-    queryFn: () => taskService.filterTasksByStatus(status),
-  });
-};
-
-export const useCreateTask = () => {
+export const useCreateTask = (status: TaskStatus) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (task: Task) => taskService.createTask(task),
     onMutate: async (task: Task) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+      await queryClient.cancelQueries({ queryKey: ['tasks', status] });
 
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks', status]);
 
-      queryClient.setQueryData<Task[]>(['tasks'], (oldTasks) =>
+      queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
         oldTasks ? [...oldTasks, task] : [task],
       );
 
@@ -35,24 +28,24 @@ export const useCreateTask = () => {
     },
     onError: (_error, _variables, context) => {
       if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks'], context.previousTasks);
+        queryClient.setQueryData(['tasks', status], context.previousTasks);
       }
     },
   });
 };
 
-export const useEditTask = () => {
+export const useEditTask = (status: TaskStatus) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, task }: { id: number; task: TaskBody }) => taskService.editTask(id, task),
     onMutate: async ({ id, task }) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+      await queryClient.cancelQueries({ queryKey: ['tasks', status] });
 
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks', status]);
 
       queryClient.setQueryData<Task[]>(
-        ['tasks'],
+        ['tasks', status],
         (oldTasks) =>
           oldTasks?.map((oldTask) => (oldTask.id === id ? { ...oldTask, ...task } : oldTask)) ?? [],
       );
@@ -61,24 +54,27 @@ export const useEditTask = () => {
     },
     onError: (_error, _variables, context) => {
       if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks'], context.previousTasks);
+        queryClient.setQueryData(['tasks', status], context.previousTasks);
       }
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
     },
   });
 };
 
-export const useUpdateTaskStatus = () => {
+export const useUpdateTaskStatus = (status: TaskStatus) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, status }: { id: number; status: TaskStatus }) =>
       taskService.updateTaskStatus(id, status),
     onMutate: async ({ id, status }: { id: number; status: TaskStatus }) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+      await queryClient.cancelQueries({ queryKey: ['tasks', status] });
 
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks', status]);
 
-      queryClient.setQueryData<Task[]>(['tasks'], (oldTasks) =>
+      queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
         oldTasks?.map((task) => (task.id === id ? { ...task, status } : task)),
       );
 
@@ -86,23 +82,29 @@ export const useUpdateTaskStatus = () => {
     },
     onError: (_error, _variables, context) => {
       if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks'], context.previousTasks);
+        queryClient.setQueryData(['tasks', status], context.previousTasks);
+      }
+    },
+    onSettled: async (_data, _error, variables) => {
+      await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
+      if (variables?.status !== status) {
+        await queryClient.invalidateQueries({ queryKey: ['tasks', variables.status] });
       }
     },
   });
 };
 
-export const useDeleteTask = () => {
+export const useDeleteTask = (status: TaskStatus) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: number) => taskService.deleteTask(id),
     onMutate: async (id: number) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+      await queryClient.cancelQueries({ queryKey: ['tasks', status] });
 
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks', status]);
 
-      queryClient.setQueryData<Task[]>(['tasks'], (oldTasks) =>
+      queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
         oldTasks?.filter((task) => task.id !== id),
       );
 
@@ -110,8 +112,11 @@ export const useDeleteTask = () => {
     },
     onError: (_error, _variables, context) => {
       if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks'], context.previousTasks);
+        queryClient.setQueryData(['tasks', status], context.previousTasks);
       }
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
     },
   });
 };

@@ -35,9 +35,10 @@ import { STATUSES, TaskStatus } from '@/features/tasks/constants/statuses';
 type ViewTaskInformationProps = {
   task: Task;
   index: number;
+  statusFilter: string;
 };
 
-export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) => {
+export const ViewTaskInformation = ({ task, index, statusFilter }: ViewTaskInformationProps) => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -59,9 +60,9 @@ export const ViewTaskInformation = ({ task, index }: ViewTaskInformationProps) =
     },
   });
 
-  const { mutate: deleteTask } = useDeleteTask();
-  const { mutate: editTask } = useEditTask();
-  const { mutate: updateTaskStatus } = useUpdateTaskStatus();
+  const { mutate: deleteTask } = useDeleteTask(Number(statusFilter) as TaskStatus);
+  const { mutate: editTask } = useEditTask(Number(statusFilter) as TaskStatus);
+  const { mutate: updateTaskStatus } = useUpdateTaskStatus(Number(statusFilter) as TaskStatus);
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
