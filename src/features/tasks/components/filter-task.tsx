@@ -9,7 +9,7 @@ type FilterTaskProps = {
 export const FilterTask = ({ status, onStatusChangeAction }: FilterTaskProps) => {
   return (
     <Tabs value={status} onValueChange={onStatusChangeAction}>
-      <TabsList className='w-[50%]'>
+      <TabsList className='w-[50%] max-lg:w-[100%]'>
         <TabsTrigger value='4'>All</TabsTrigger>
         <TabsTrigger value='0'>To do</TabsTrigger>
         <TabsTrigger value='1'>In progress</TabsTrigger>

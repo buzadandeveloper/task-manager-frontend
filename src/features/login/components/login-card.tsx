@@ -3,7 +3,7 @@ import { useOAuthLogin } from '@/features/login/hooks/use-auth';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Github } from 'lucide-react';
-import { GoogleIcon } from '@/features/icons/google-icon';
+import { GoogleIcon } from '@/icons/google-icon';
 import { TaskManagerIcon } from '@/icons/task-manager-icon';
 
 export const LoginCard = () => {
