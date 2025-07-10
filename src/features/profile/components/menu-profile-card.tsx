@@ -1,7 +1,7 @@
 import { User } from '@/features/profile/types/user.types';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { GoogleIcon } from '@/features/icons/google-icon';
+import { GoogleIcon } from '@/icons/google-icon';
 import { Github, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
