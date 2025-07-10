@@ -135,7 +135,7 @@ export const ViewTaskInformation = ({ task, index, statusFilter }: ViewTaskInfor
               <DropdownMenuTrigger asChild>
                 <Badge className='cursor-pointer'>{STATUSES[status!]}</Badge>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className='bg-card'>
+              <DropdownMenuContent>
                 <DropdownMenuLabel>Status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuRadioGroup
