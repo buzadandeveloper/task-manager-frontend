@@ -5,7 +5,6 @@ import { QueryProvider } from '@/providers/query-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from 'next-themes';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/app-sidebar';
 import { AppNavbar } from '@/components/app-navbar';
 import './globals.css';
 
@@ -36,7 +35,6 @@ export default function RootLayout({
           <QueryProvider>
             <AppNavbar />
             <SidebarProvider>
-              <AppSidebar />
               {children}
               <Toaster position={'top-right'} expand visibleToasts={1} />
             </SidebarProvider>
