@@ -38,7 +38,7 @@ function Dashboard() {
           {noTasks && (
             <div className='flex justify-center items-center gap-2'>
               <TaskManagerIcon />
-              {noTasksTitle(status)}
+              {noTasksText(status)}
             </div>
           )}
         </div>
@@ -49,7 +49,7 @@ function Dashboard() {
 
 export default withAuth(Dashboard);
 
-const noTasksTitle = (status: string) => {
+const noTasksText = (status: string) => {
   if (status === '0') {
     return 'No tasks in to do';
   } else if (status === '1') {
