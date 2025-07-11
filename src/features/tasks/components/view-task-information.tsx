@@ -36,9 +36,15 @@ type ViewTaskInformationProps = {
   task: Task;
   index: number;
   statusFilter: string;
+  disabled?: boolean;
 };
 
-export const ViewTaskInformation = ({ task, index, statusFilter }: ViewTaskInformationProps) => {
+export const ViewTaskInformation = ({
+  task,
+  index,
+  statusFilter,
+  disabled,
+}: ViewTaskInformationProps) => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -142,9 +148,15 @@ export const ViewTaskInformation = ({ task, index, statusFilter }: ViewTaskInfor
                   value={status?.toString()}
                   onValueChange={(newStatus) => updateStatus(newStatus)}
                 >
-                  <DropdownMenuRadioItem value='0'>To do</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value='1'>In Progress</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value='2'>Completed</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value='0' disabled={disabled}>
+                    To do
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value='1' disabled={disabled}>
+                    In Progress
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value='2' disabled={disabled}>
+                    Completed
+                  </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -197,7 +209,7 @@ export const ViewTaskInformation = ({ task, index, statusFilter }: ViewTaskInfor
                   <>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Button variant='secondary' onClick={handleEdit}>
+                        <Button variant='secondary' onClick={handleEdit} disabled={disabled}>
                           <Pencil />
                         </Button>
                       </TooltipTrigger>
@@ -205,7 +217,11 @@ export const ViewTaskInformation = ({ task, index, statusFilter }: ViewTaskInfor
                     </Tooltip>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Button variant='secondary' onClick={() => handleDelete(id!)}>
+                        <Button
+                          variant='secondary'
+                          onClick={() => handleDelete(id!)}
+                          disabled={disabled}
+                        >
                           <Trash2 />
                         </Button>
                       </TooltipTrigger>

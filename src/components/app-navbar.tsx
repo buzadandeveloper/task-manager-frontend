@@ -20,7 +20,7 @@ export const AppNavbar = () => {
   }
 
   return (
-    <Card className='w-full h-[50px] bg-white/10 backdrop-blur-none fixed rounded-none shadow-none dark:bg-zinc-700'>
+    <Card className='w-full h-[50px] bg-white backdrop-blur-none fixed rounded-none shadow-none dark:bg-zinc-700 z-50'>
       <CardContent className='flex justify-between items-center h-full ml-2 mr-2 gap-5 md:ml-[10em] md:mr-[10em]'>
         <div className='flex gap-1 text-l hover:bg-transparent font-semibold'>
           <TaskManagerIcon />
