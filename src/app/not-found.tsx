@@ -2,7 +2,7 @@ import { TaskManagerIcon } from '@/icons/task-manager-icon';
 
 export default function NotFound() {
   return (
-    <main className='flex items-center justify-center fixed bg-background h-screen w-full'>
+    <main className='flex items-center justify-center fixed bg-background h-screen w-full z-60'>
       <div className='flex items-center gap-1 text-l font-semibold hover:bg-transparent top-5 left-5 absolute p-5'>
         <TaskManagerIcon />
         Task Manager
