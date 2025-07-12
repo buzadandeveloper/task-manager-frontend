@@ -17,7 +17,8 @@ export default function Home() {
         {exampleTasks.map((task, index) => (
           <div
             key={task.status}
-            className={`w-[250px] rotate-[${task.rotate}] transform transition-transform hover:scale-105`}
+            className='w-[250px] transform transition-transform hover:scale-105'
+            style={{ transform: `rotate(${task.rotate})` }}
           >
             <TaskCard
               task={{
