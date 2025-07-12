@@ -5,14 +5,19 @@ import { Button } from '@/components/ui/button';
 import { Github } from 'lucide-react';
 import { GoogleIcon } from '@/icons/google-icon';
 import { TaskManagerIcon } from '@/icons/task-manager-icon';
+import { useRouter } from 'next/navigation';
 
 export const LoginCard = () => {
   const { loginWithGoogle, loginWithGitHub } = useOAuthLogin();
+  const router = useRouter();
 
   return (
     <main className='w-[65%] h-screen max-md:w-full'>
       <Card className='flex justify-center align-center w-full h-screen rounded-none bg-white/10 backdrop-blur-none bg-card'>
-        <CardTitle className='flex items-center gap-1 text-l hover:bg-transparent top-5 left-5 absolute p-5'>
+        <CardTitle
+          className='flex items-center gap-1 text-l hover:bg-transparent top-5 left-5 absolute p-5 cursor-pointer'
+          onClick={() => router.push('/')}
+        >
           <TaskManagerIcon />
           Task Manager
         </CardTitle>
