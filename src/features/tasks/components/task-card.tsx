@@ -18,7 +18,7 @@ import { format } from 'date-fns';
 type TaskCardProps = {
   task: Task;
   index: number;
-  statusFilter: string;
+  statusFilter?: string;
   disabled?: boolean;
 };
 
