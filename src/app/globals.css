@@ -120,8 +120,8 @@
 .custom-scrollbar {
   @apply [&::-webkit-scrollbar]:w-2
   [&::-webkit-scrollbar-track]:bg-transparent
-  [&::-webkit-scrollbar-track]:mt-1
-  [&::-webkit-scrollbar-track]:mb-1
+  [&::-webkit-scrollbar-track]:mt-2
+  [&::-webkit-scrollbar-track]:mb-2
   [&::-webkit-scrollbar-thumb]:bg-gray-200
   [&::-webkit-scrollbar-thumb]:rounded-[50px]
   [&::-webkit-scrollbar-thumb]:cursor-pointer

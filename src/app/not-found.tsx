@@ -1,9 +1,16 @@
+'use client';
 import { TaskManagerIcon } from '@/icons/task-manager-icon';
+import { useRouter } from 'next/navigation';
 
 export default function NotFound() {
+  const router = useRouter();
+
   return (
     <main className='flex items-center justify-center fixed bg-background h-screen w-full z-60'>
-      <div className='flex items-center gap-1 text-l font-semibold hover:bg-transparent top-5 left-5 absolute p-5'>
+      <div
+        className='flex items-center gap-1 text-l font-semibold hover:bg-transparent top-5 left-5 absolute p-5 cursor-pointer'
+        onClick={() => router.push('/')}
+      >
         <TaskManagerIcon />
         Task Manager
       </div>

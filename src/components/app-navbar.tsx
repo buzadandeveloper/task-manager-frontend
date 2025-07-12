@@ -18,17 +18,27 @@ export const AppNavbar = () => {
   if (hiddenRoutes.includes(pathname)) {
     return null;
   }
+  const handleRedirectDashboard = () => {
+    if (!user) {
+      router.push('/login');
+    } else {
+      router.push('/dashboard');
+    }
+  };
 
   return (
     <Card className='w-full h-[50px] bg-white backdrop-blur-none fixed rounded-none shadow-none dark:bg-zinc-700 z-50'>
       <CardContent className='flex justify-between items-center h-full ml-2 mr-2 gap-5 md:ml-[10em] md:mr-[10em]'>
-        <div className='flex gap-1 text-l hover:bg-transparent font-semibold'>
+        <div
+          className='flex gap-1 text-l hover:bg-transparent font-semibold cursor-pointer'
+          onClick={() => router.push('/')}
+        >
           <TaskManagerIcon />
           Task Manager
         </div>
         <div className='flex items-center'>
           {!user && (
-            <Button size='sm' variant='nav' onClick={() => router.push('/login')}>
+            <Button size='sm' variant='nav' onClick={handleRedirectDashboard}>
               <LayoutDashboard />
               Dashboard
             </Button>

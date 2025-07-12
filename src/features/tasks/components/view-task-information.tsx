@@ -35,7 +35,7 @@ import { STATUSES, TaskStatus } from '@/features/tasks/constants/statuses';
 type ViewTaskInformationProps = {
   task: Task;
   index: number;
-  statusFilter: string;
+  statusFilter?: string;
   disabled?: boolean;
 };
 

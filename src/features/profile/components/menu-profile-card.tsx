@@ -2,7 +2,7 @@ import { User } from '@/features/profile/types/user.types';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { GoogleIcon } from '@/icons/google-icon';
-import { Github, LogOut } from 'lucide-react';
+import { Github, LayoutDashboard, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useOAuthLogin } from '@/features/login/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
 type ProfileCardProps = {
   user: User;
@@ -21,6 +22,7 @@ type ProfileCardProps = {
 
 export const MenuProfileCard = ({ user }: ProfileCardProps) => {
   const { logout } = useOAuthLogin();
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -49,6 +51,12 @@ export const MenuProfileCard = ({ user }: ProfileCardProps) => {
         </div>
         <DropdownMenuGroup>
           <DropdownMenuSeparator />
+          {user && (
+            <DropdownMenuItem onClick={() => router.push('/dashboard')}>
+              <LayoutDashboard />
+              Dashboard
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={logout}>
             <LogOut /> Log out
           </DropdownMenuItem>
