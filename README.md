@@ -51,7 +51,7 @@ This frontend connects to:
 
 👉 [task-manager-backend](https://github.com/buzadandeveloper/task-manager-backend)
 
-Ensure that `NEXT_PUBLIC_API_URL` is set correctly in `.env.local`.
+Ensure that `NEXT_PUBLIC_API_URL` is set correctly in `.env`.
 
 ---
 
