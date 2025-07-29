@@ -48,11 +48,8 @@ export const useEditTask = () => {
       const { id, status, ...task } = data;
 
       [4, status].forEach((status) => {
-        queryClient.setQueryData<Task[]>(
-          ['tasks', status],
-          (oldTasks) =>
-            oldTasks?.map((oldTask) => (oldTask.id === id ? { ...oldTask, ...task } : oldTask)) ??
-            [],
+        queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
+          oldTasks?.map((oldTask) => (oldTask.id === id ? { ...oldTask, ...task } : oldTask)),
         );
       });
 
@@ -72,18 +69,14 @@ export const useEditTask = () => {
   });
 };
 
-export const useUpdateTaskStatus = (status: TaskStatus) => {
+export const useUpdateTaskStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, status }: { id: number; status: TaskStatus }) =>
       taskService.updateTaskStatus(id, status),
-    onSuccess: (status, variables) => {
-      const { id } = variables;
-
-      queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
-        oldTasks?.map((task) => (task.id === id ? { ...task, status } : task)),
-      );
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['tasks'] });
 
       showToast({
         title: 'Status updated',
@@ -97,12 +90,6 @@ export const useUpdateTaskStatus = (status: TaskStatus) => {
         description: 'Failed to update task status.',
         variant: 'destructive',
       });
-    },
-    onSettled: async (_data, _error, variables) => {
-      await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
-      if (variables?.status !== status) {
-        await queryClient.invalidateQueries({ queryKey: ['tasks', variables.status] });
-      }
     },
   });
 };

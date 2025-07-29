@@ -31,9 +31,7 @@ function Dashboard() {
           {isLoading ? (
             <TaskManagerIcon className='animate-spin scale-[2]' />
           ) : (
-            tasks?.map((task, index) => (
-              <TaskCard key={task.id} task={task} index={index} statusFilter={status} />
-            ))
+            tasks?.map((task, index) => <TaskCard key={task.id} task={task} index={index} />)
           )}
           {noTasks && (
             <div className='flex justify-center items-center gap-2'>

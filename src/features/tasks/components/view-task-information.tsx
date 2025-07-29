@@ -39,12 +39,7 @@ type ViewTaskInformationProps = {
   disabled?: boolean;
 };
 
-export const ViewTaskInformation = ({
-  task,
-  index,
-  statusFilter,
-  disabled,
-}: ViewTaskInformationProps) => {
+export const ViewTaskInformation = ({ task, index, disabled }: ViewTaskInformationProps) => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -68,9 +63,7 @@ export const ViewTaskInformation = ({
 
   const { mutate: deleteTask, isPending: deleteTaskIsPending } = useDeleteTask();
   const { mutate: editTask, isPending: editTaskIsPending } = useEditTask();
-  const { mutate: updateTaskStatus, isPending: updateTaskStatusIsPending } = useUpdateTaskStatus(
-    Number(statusFilter) as TaskStatus,
-  );
+  const { mutate: updateTaskStatus, isPending: updateTaskStatusIsPending } = useUpdateTaskStatus();
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
