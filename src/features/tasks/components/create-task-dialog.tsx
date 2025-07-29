@@ -44,7 +44,7 @@ export const CreateTaskDialog = ({ status }: CreateTaskDialogProps) => {
     },
   });
 
-  const { mutate: createTask } = useCreateTask(Number(status) as TaskStatus);
+  const { mutate: createTask, isPending } = useCreateTask(Number(status) as TaskStatus);
 
   const setDate = (date: Date) => {
     setValue('date', date, { shouldValidate: true });
@@ -111,11 +111,13 @@ export const CreateTaskDialog = ({ status }: CreateTaskDialogProps) => {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant='secondary' onClick={() => onHandleCancel()}>
+                <Button variant='secondary' disabled={isPending} onClick={() => onHandleCancel()}>
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type='submit'>Create</Button>
+              <Button type='submit' disabled={isPending}>
+                Create
+              </Button>
             </DialogFooter>
           </div>
         </form>

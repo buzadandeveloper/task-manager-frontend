@@ -11,9 +11,10 @@ import { cn } from '@/lib/utils';
 type DatePickerProps = {
   selected?: Date;
   onSelect?: (date: Date | undefined) => void;
+  disabled?: boolean;
 };
 
-export function DatePicker({ selected, onSelect }: DatePickerProps) {
+export function DatePicker({ selected, onSelect, disabled }: DatePickerProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -25,6 +26,7 @@ export function DatePicker({ selected, onSelect }: DatePickerProps) {
             'w-full justify-start text-left font-normal',
             !selected && 'text-muted-foreground',
           )}
+          disabled={disabled}
         >
           <CalendarIcon className='mr-2 h-4 w-4' />
           {selected ? format(selected, 'PPP') : <span>Select a date</span>}

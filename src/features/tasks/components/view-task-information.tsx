@@ -66,9 +66,15 @@ export const ViewTaskInformation = ({
     },
   });
 
-  const { mutate: deleteTask } = useDeleteTask(Number(statusFilter) as TaskStatus);
-  const { mutate: editTask } = useEditTask(Number(statusFilter) as TaskStatus);
-  const { mutate: updateTaskStatus } = useUpdateTaskStatus(Number(statusFilter) as TaskStatus);
+  const { mutate: deleteTask, isPending: deleteTaskIsPending } = useDeleteTask(
+    Number(statusFilter) as TaskStatus,
+  );
+  const { mutate: editTask, isPending: editTaskIsPending } = useEditTask(
+    Number(statusFilter) as TaskStatus,
+  );
+  const { mutate: updateTaskStatus, isPending: updateTaskStatusIsPending } = useUpdateTaskStatus(
+    Number(statusFilter) as TaskStatus,
+  );
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
@@ -140,7 +146,10 @@ export const ViewTaskInformation = ({
           <div className='flex justify-between'>
             <DialogTitle className='text-md'>#{index + 1}</DialogTitle>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger
+                asChild
+                disabled={editTaskIsPending || updateTaskStatusIsPending}
+              >
                 <Badge className='cursor-pointer'>{STATUSES[status!]}</Badge>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -167,7 +176,11 @@ export const ViewTaskInformation = ({
             <div className='grid gap-1'>
               <div className='grid gap-3'>
                 <DialogTitle className='text-md font-normal'>Task name:</DialogTitle>
-                <Input disabled={!isEditing} defaultValue={title} {...register('title')} />
+                <Input
+                  disabled={!isEditing || editTaskIsPending}
+                  defaultValue={title}
+                  {...register('title')}
+                />
               </div>
               {errors.title && <p className='text-red-500 text-sm'>{errors.title.message}</p>}
             </div>
@@ -176,7 +189,7 @@ export const ViewTaskInformation = ({
                 <DialogTitle className='text-md font-normal'>Task details:</DialogTitle>
                 <Textarea
                   className='custom-scrollbar resize-none h-[150px]'
-                  disabled={!isEditing}
+                  disabled={!isEditing || editTaskIsPending}
                   defaultValue={description}
                   {...register('description')}
                 />
@@ -192,7 +205,11 @@ export const ViewTaskInformation = ({
                   <>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Button variant='secondary' onClick={handleSubmit(handleSave)}>
+                        <Button
+                          variant='secondary'
+                          disabled={editTaskIsPending}
+                          onClick={handleSubmit(handleSave)}
+                        >
                           <Check />
                         </Button>
                       </TooltipTrigger>
@@ -200,7 +217,11 @@ export const ViewTaskInformation = ({
                     </Tooltip>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Button variant='secondary' onClick={handleCancel}>
+                        <Button
+                          variant='secondary'
+                          disabled={editTaskIsPending}
+                          onClick={handleCancel}
+                        >
                           <X />
                         </Button>
                       </TooltipTrigger>
@@ -211,7 +232,11 @@ export const ViewTaskInformation = ({
                   <>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Button variant='secondary' onClick={handleEdit} disabled={disabled}>
+                        <Button
+                          variant='secondary'
+                          onClick={handleEdit}
+                          disabled={disabled || deleteTaskIsPending}
+                        >
                           <Pencil />
                         </Button>
                       </TooltipTrigger>
@@ -222,7 +247,7 @@ export const ViewTaskInformation = ({
                         <Button
                           variant='secondary'
                           onClick={() => handleDelete(id!)}
-                          disabled={disabled}
+                          disabled={disabled || deleteTaskIsPending}
                         >
                           <Trash2 />
                         </Button>
@@ -235,7 +260,11 @@ export const ViewTaskInformation = ({
             </div>
             {isEditing ? (
               <div className='w-[160px]'>
-                <DatePicker selected={watch('date')} onSelect={(date) => setDate(date as Date)} />
+                <DatePicker
+                  selected={watch('date')}
+                  onSelect={(date) => setDate(date as Date)}
+                  disabled={editTaskIsPending}
+                />
                 {errors.date && <p className='text-red-500 text-sm'>{errors.date.message}</p>}
               </div>
             ) : (
