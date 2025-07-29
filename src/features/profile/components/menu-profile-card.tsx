@@ -41,7 +41,7 @@ export const MenuProfileCard = ({ user }: ProfileCardProps) => {
           <div className='flex flex-col items-center'>
             <div className='flex flex-col gap-2'>
               <h2 className='text-xs font-bold'>{user.name}</h2>
-              <p className='text-xs mb-1'>{user.email}</p>
+              {user.provider === 'google' && <p className='text-xs mb-1'>{user.email}</p>}
               <Badge variant='secondary' className='bg-wrapper'>
                 {user.provider === 'google' ? <GoogleIcon /> : <Github className='w-4 h-[14px]' />}
                 Logged in via {user.provider === 'google' ? 'Google' : 'GitHub'}
