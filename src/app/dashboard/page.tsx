@@ -26,7 +26,7 @@ function Dashboard() {
       </div>
       <div className='w-full h-[calc(100vh-252px)] rounded-xl p-6 overflow-auto custom-scrollbar bg-wrapper'>
         <div
-          className={`${isLoading || noTasks ? 'flex justify-center items-center h-full' : 'grid gap-4 grid-cols-[repeat(auto-fit,minmax(230px,1fr))]'}`}
+          className={`${isLoading || noTasks ? 'flex justify-center items-center h-full' : 'grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(230px,1fr))]'}`}
         >
           {isLoading ? (
             <TaskManagerIcon className='animate-spin scale-[2]' />

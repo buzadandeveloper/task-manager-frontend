@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { taskService } from '@/features/tasks/services/task.service';
 import { Task, TaskBody } from '@/features/tasks/types/task.types';
 import { TaskStatus } from '@/features/tasks/constants/statuses';
+import { showToast } from '@/lib/show-toast';
 
 export const useGetTasks = (status: TaskStatus) => {
   return useQuery({
@@ -15,21 +16,10 @@ export const useCreateTask = (status: TaskStatus) => {
 
   return useMutation({
     mutationFn: (task: Task) => taskService.createTask(task),
-    onMutate: async (task: Task) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks', status] });
-
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks', status]);
-
+    onSuccess: (data) => {
       queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
-        oldTasks ? [...oldTasks, task] : [task],
+        oldTasks ? [...oldTasks, data] : [data],
       );
-
-      return { previousTasks };
-    },
-    onError: (_error, _variables, context) => {
-      if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks', status], context.previousTasks);
-      }
     },
   });
 };
@@ -39,23 +29,14 @@ export const useEditTask = (status: TaskStatus) => {
 
   return useMutation({
     mutationFn: ({ id, task }: { id: number; task: TaskBody }) => taskService.editTask(id, task),
-    onMutate: async ({ id, task }) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks', status] });
-
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks', status]);
+    onSuccess: (data) => {
+      const { id, ...task } = data;
 
       queryClient.setQueryData<Task[]>(
         ['tasks', status],
         (oldTasks) =>
           oldTasks?.map((oldTask) => (oldTask.id === id ? { ...oldTask, ...task } : oldTask)) ?? [],
       );
-
-      return { previousTasks };
-    },
-    onError: (_error, _variables, context) => {
-      if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks', status], context.previousTasks);
-      }
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
@@ -69,21 +50,12 @@ export const useUpdateTaskStatus = (status: TaskStatus) => {
   return useMutation({
     mutationFn: ({ id, status }: { id: number; status: TaskStatus }) =>
       taskService.updateTaskStatus(id, status),
-    onMutate: async ({ id, status }: { id: number; status: TaskStatus }) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks', status] });
-
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks', status]);
+    onSuccess: (status, variables) => {
+      const { id } = variables;
 
       queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
         oldTasks?.map((task) => (task.id === id ? { ...task, status } : task)),
       );
-
-      return { previousTasks };
-    },
-    onError: (_error, _variables, context) => {
-      if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks', status], context.previousTasks);
-      }
     },
     onSettled: async (_data, _error, variables) => {
       await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
@@ -99,21 +71,18 @@ export const useDeleteTask = (status: TaskStatus) => {
 
   return useMutation({
     mutationFn: (id: number) => taskService.deleteTask(id),
-    onMutate: async (id: number) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks', status] });
-
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks', status]);
-
+    onSuccess: (_data, id) => {
       queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
         oldTasks?.filter((task) => task.id !== id),
       );
-
-      return { previousTasks };
+      showToast({
+        title: 'Task deleted',
+        description: 'Your task was deleted successfully.',
+        variant: 'default',
+      });
     },
-    onError: (_error, _variables, context) => {
-      if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks', status], context.previousTasks);
-      }
+    onError: () => {
+      showToast({ title: 'Error', description: 'Failed to delete task.', variant: 'destructive' });
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ['tasks', status] });

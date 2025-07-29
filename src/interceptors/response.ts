@@ -14,7 +14,7 @@ const responseErrorInterceptor = async (error: AxiosError) => {
     window.location.href = '/login';
   }
 
-  showToast({ title: 'Error', description: 'Something went wrong.' });
+  showToast({ title: 'Error', description: 'Something went wrong.', variant: 'destructive' });
 
   return Promise.reject(error);
 };

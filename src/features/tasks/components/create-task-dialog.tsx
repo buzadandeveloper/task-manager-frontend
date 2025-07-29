@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/date-picker';
+import { showToast } from '@/lib/show-toast';
 import { TaskStatus } from '@/features/tasks/constants/statuses';
 
 type CreateTaskDialogProps = {
@@ -65,10 +66,24 @@ export const CreateTaskDialog = ({ status }: CreateTaskDialogProps) => {
       status: 0 as const,
     };
 
-    createTask(payload);
-
-    onHandleCancel();
-    setOpen(false);
+    createTask(payload, {
+      onSuccess: () => {
+        setOpen(false);
+        onHandleCancel();
+        showToast({
+          title: 'Task created',
+          description: 'Your task was added successfully.',
+          variant: 'default',
+        });
+      },
+      onError: () => {
+        showToast({
+          title: 'Error',
+          description: 'Failed to create task.',
+          variant: 'destructive',
+        });
+      },
+    });
   };
 
   return (

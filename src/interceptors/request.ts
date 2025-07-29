@@ -13,7 +13,7 @@ const requestInterceptor = (config: InternalAxiosRequestConfig): InternalAxiosRe
 };
 
 const requestErrorInterceptor = async (error: AxiosError) => {
-  showToast({ title: 'Error', description: 'Something went wrong.' });
+  showToast({ title: 'Error', description: 'Something went wrong.', variant: 'destructive' });
 
   return Promise.reject(error);
 };
