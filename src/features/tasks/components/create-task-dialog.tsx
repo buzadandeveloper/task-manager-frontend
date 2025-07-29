@@ -19,13 +19,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/date-picker';
-import { TaskStatus } from '@/features/tasks/constants/statuses';
 
-type CreateTaskDialogProps = {
-  status: string;
-};
-
-export const CreateTaskDialog = ({ status }: CreateTaskDialogProps) => {
+export const CreateTaskDialog = () => {
   const [open, setOpen] = useState(false);
 
   const {
@@ -44,7 +39,7 @@ export const CreateTaskDialog = ({ status }: CreateTaskDialogProps) => {
     },
   });
 
-  const { mutate: createTask, isPending } = useCreateTask(Number(status) as TaskStatus);
+  const { mutate: createTask, isPending } = useCreateTask();
 
   const setDate = (date: Date) => {
     setValue('date', date, { shouldValidate: true });

@@ -19,7 +19,7 @@ function Dashboard() {
   return (
     <div className='flex flex-col gap-[1em] h-full w-full mt-[64px] ml-8 mr-8 md:ml-[12em] md:mr-[12em]'>
       <div className='w-full flex justify-end'>
-        <CreateTaskDialog status={status} />
+        <CreateTaskDialog />
       </div>
       <div className='w-full rounded-xl '>
         <FilterTask status={status} onStatusChangeAction={onStatusChangeAction} />

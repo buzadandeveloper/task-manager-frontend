@@ -66,12 +66,8 @@ export const ViewTaskInformation = ({
     },
   });
 
-  const { mutate: deleteTask, isPending: deleteTaskIsPending } = useDeleteTask(
-    Number(statusFilter) as TaskStatus,
-  );
-  const { mutate: editTask, isPending: editTaskIsPending } = useEditTask(
-    Number(statusFilter) as TaskStatus,
-  );
+  const { mutate: deleteTask, isPending: deleteTaskIsPending } = useDeleteTask();
+  const { mutate: editTask, isPending: editTaskIsPending } = useEditTask();
   const { mutate: updateTaskStatus, isPending: updateTaskStatusIsPending } = useUpdateTaskStatus(
     Number(statusFilter) as TaskStatus,
   );
@@ -118,7 +114,8 @@ export const ViewTaskInformation = ({
   };
 
   const handleDelete = (id: number) => {
-    deleteTask(id, {
+    const payload = { id, status: Number(status) as TaskStatus };
+    deleteTask(payload, {
       onSuccess: () => {
         setOpen(false);
       },

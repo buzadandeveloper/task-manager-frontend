@@ -11,15 +11,17 @@ export const useGetTasks = (status: TaskStatus) => {
   });
 };
 
-export const useCreateTask = (status: TaskStatus) => {
+export const useCreateTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (task: Task) => taskService.createTask(task),
     onSuccess: (data) => {
-      queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
-        oldTasks ? [...oldTasks, data] : [data],
-      );
+      [0, 4].forEach((status) => {
+        queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
+          oldTasks ? [...oldTasks, data] : [data],
+        );
+      });
 
       showToast({
         title: 'Task created',
@@ -37,19 +39,22 @@ export const useCreateTask = (status: TaskStatus) => {
   });
 };
 
-export const useEditTask = (status: TaskStatus) => {
+export const useEditTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, task }: { id: number; task: TaskBody }) => taskService.editTask(id, task),
     onSuccess: (data) => {
-      const { id, ...task } = data;
+      const { id, status, ...task } = data;
 
-      queryClient.setQueryData<Task[]>(
-        ['tasks', status],
-        (oldTasks) =>
-          oldTasks?.map((oldTask) => (oldTask.id === id ? { ...oldTask, ...task } : oldTask)) ?? [],
-      );
+      [4, status].forEach((status) => {
+        queryClient.setQueryData<Task[]>(
+          ['tasks', status],
+          (oldTasks) =>
+            oldTasks?.map((oldTask) => (oldTask.id === id ? { ...oldTask, ...task } : oldTask)) ??
+            [],
+        );
+      });
 
       showToast({
         title: 'Task updated',
@@ -63,9 +68,6 @@ export const useEditTask = (status: TaskStatus) => {
         description: 'Failed to update task.',
         variant: 'destructive',
       });
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
     },
   });
 };
@@ -105,15 +107,23 @@ export const useUpdateTaskStatus = (status: TaskStatus) => {
   });
 };
 
-export const useDeleteTask = (status: TaskStatus) => {
+export const useDeleteTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => taskService.deleteTask(id),
-    onSuccess: (_data, id) => {
-      queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
-        oldTasks?.filter((task) => task.id !== id),
-      );
+    mutationFn: (payload: { id: number; status: number }) => {
+      const { id } = payload;
+
+      return taskService.deleteTask(id);
+    },
+    onSuccess: (_data, variables) => {
+      const { id, status } = variables;
+
+      [4, status].forEach((status) => {
+        queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
+          oldTasks?.filter((task) => task.id !== id),
+        );
+      });
       showToast({
         title: 'Task deleted',
         description: 'Your task was deleted successfully.',
@@ -122,9 +132,6 @@ export const useDeleteTask = (status: TaskStatus) => {
     },
     onError: () => {
       showToast({ title: 'Error', description: 'Failed to delete task.', variant: 'destructive' });
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
     },
   });
 };
