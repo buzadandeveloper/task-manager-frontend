@@ -20,6 +20,19 @@ export const useCreateTask = (status: TaskStatus) => {
       queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
         oldTasks ? [...oldTasks, data] : [data],
       );
+
+      showToast({
+        title: 'Task created',
+        description: 'Your task was added successfully.',
+        variant: 'default',
+      });
+    },
+    onError: () => {
+      showToast({
+        title: 'Error',
+        description: 'Failed to create task.',
+        variant: 'destructive',
+      });
     },
   });
 };
@@ -37,6 +50,19 @@ export const useEditTask = (status: TaskStatus) => {
         (oldTasks) =>
           oldTasks?.map((oldTask) => (oldTask.id === id ? { ...oldTask, ...task } : oldTask)) ?? [],
       );
+
+      showToast({
+        title: 'Task updated',
+        description: 'Your task was updated successfully.',
+        variant: 'default',
+      });
+    },
+    onError: () => {
+      showToast({
+        title: 'Error',
+        description: 'Failed to update task.',
+        variant: 'destructive',
+      });
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ['tasks', status] });
@@ -56,6 +82,19 @@ export const useUpdateTaskStatus = (status: TaskStatus) => {
       queryClient.setQueryData<Task[]>(['tasks', status], (oldTasks) =>
         oldTasks?.map((task) => (task.id === id ? { ...task, status } : task)),
       );
+
+      showToast({
+        title: 'Status updated',
+        description: `Task status updated.`,
+        variant: 'default',
+      });
+    },
+    onError: () => {
+      showToast({
+        title: 'Error',
+        description: 'Failed to update task status.',
+        variant: 'destructive',
+      });
     },
     onSettled: async (_data, _error, variables) => {
       await queryClient.invalidateQueries({ queryKey: ['tasks', status] });

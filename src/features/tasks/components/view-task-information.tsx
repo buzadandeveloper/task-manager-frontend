@@ -29,7 +29,6 @@ import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/comp
 import { DatePicker } from '@/components/date-picker';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { useDeleteTask, useEditTask, useUpdateTaskStatus } from '@/features/tasks/hooks/use-task';
-import { showToast } from '@/lib/show-toast';
 import { Task } from '@/features/tasks/types/task.types';
 import { STATUSES, TaskStatus } from '@/features/tasks/constants/statuses';
 
@@ -93,18 +92,6 @@ export const ViewTaskInformation = ({
         setOpen(false);
         setIsEditing(false);
         reset({ ...data });
-        showToast({
-          title: 'Task updated',
-          description: 'Your task was updated successfully.',
-          variant: 'default',
-        });
-      },
-      onError: () => {
-        showToast({
-          title: 'Error',
-          description: 'Failed to update task.',
-          variant: 'destructive',
-        });
       },
     });
   };
@@ -112,22 +99,7 @@ export const ViewTaskInformation = ({
   const updateStatus = (status: string) => {
     const payload = { id: id!, status: Number(status) as TaskStatus };
 
-    updateTaskStatus(payload, {
-      onSuccess: () => {
-        showToast({
-          title: 'Status updated',
-          description: `Task status updated.`,
-          variant: 'default',
-        });
-      },
-      onError: () => {
-        showToast({
-          title: 'Error',
-          description: 'Failed to update task status.',
-          variant: 'destructive',
-        });
-      },
-    });
+    updateTaskStatus(payload);
   };
 
   const handleCancel = () => {
