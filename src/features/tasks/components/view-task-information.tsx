@@ -16,19 +16,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-} from '@/components/ui/dropdown-menu';
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { DatePicker } from '@/components/date-picker';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
-import { useDeleteTask, useEditTask, useUpdateTaskStatus } from '@/features/tasks/hooks/use-task';
+import { useDeleteTask, useEditTask } from '@/features/tasks/hooks/use-task';
 import { Task } from '@/features/tasks/types/task.types';
 import { STATUSES, TaskStatus } from '@/features/tasks/constants/statuses';
 
@@ -63,7 +54,6 @@ export const ViewTaskInformation = ({ task, index, disabled }: ViewTaskInformati
 
   const { mutate: deleteTask, isPending: deleteTaskIsPending } = useDeleteTask();
   const { mutate: editTask, isPending: editTaskIsPending } = useEditTask();
-  const { mutate: updateTaskStatus, isPending: updateTaskStatusIsPending } = useUpdateTaskStatus();
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
@@ -89,12 +79,6 @@ export const ViewTaskInformation = ({ task, index, disabled }: ViewTaskInformati
         reset({ ...data });
       },
     });
-  };
-
-  const updateStatus = (status: string) => {
-    const payload = { id: id!, status: Number(status) as TaskStatus };
-
-    updateTaskStatus(payload);
   };
 
   const handleCancel = () => {
@@ -135,32 +119,7 @@ export const ViewTaskInformation = ({ task, index, disabled }: ViewTaskInformati
         <div>
           <div className='flex justify-between'>
             <DialogTitle className='text-md'>#{index + 1}</DialogTitle>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                asChild
-                disabled={editTaskIsPending || updateTaskStatusIsPending}
-              >
-                <Badge className='cursor-pointer'>{STATUSES[status!]}</Badge>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Status</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup
-                  value={status?.toString()}
-                  onValueChange={(newStatus) => updateStatus(newStatus)}
-                >
-                  <DropdownMenuRadioItem value='0' disabled={disabled}>
-                    To do
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value='1' disabled={disabled}>
-                    In Progress
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value='2' disabled={disabled}>
-                    Completed
-                  </DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Badge>{STATUSES[status!]}</Badge>
           </div>
           <div className='flex flex-col gap-2'>
             <div className='grid gap-1'>
